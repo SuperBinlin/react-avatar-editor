@@ -14,6 +14,7 @@ class App extends React.Component {
     preview: null,
     width: 200,
     height: 200,
+    isRotateY: false,
     disableCanvasRotation: false,
   }
 
@@ -144,6 +145,7 @@ class App extends React.Component {
               onLoadSuccess={this.logCallback.bind(this, 'onLoadSuccess')}
               onImageReady={this.logCallback.bind(this, 'onImageReady')}
               image={this.state.image}
+              isRotateY={this.state.isRotateY}
               className="editor-canvas"
               disableCanvasRotation={this.state.disableCanvasRotation}
             />

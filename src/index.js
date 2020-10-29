@@ -148,6 +148,7 @@ class AvatarEditor extends React.Component {
   static propTypes = {
     scale: PropTypes.number,
     rotate: PropTypes.number,
+    isRotateY: PropTypes.bool,
     image: PropTypes.oneOfType([
       PropTypes.string,
       ...(isFileAPISupported ? [PropTypes.instanceOf(File)] : []),
@@ -181,6 +182,7 @@ class AvatarEditor extends React.Component {
   static defaultProps = {
     scale: 1,
     rotate: 0,
+    isRotateY: false,
     border: 25,
     borderRadius: 0,
     width: 200,
@@ -528,6 +530,13 @@ class AvatarEditor extends React.Component {
         -(context.canvas.width / 2),
         -(context.canvas.height / 2)
       )
+      if (!this.props.isRotateY) {
+        context.scale(1, 1);
+        context.translate(0, 0); 
+      } else {
+        context.scale(-1, 1);
+        context.translate(-image.width, 0);
+      }
 
       if (this.isVertical()) {
         context.translate(
@@ -591,6 +600,9 @@ class AvatarEditor extends React.Component {
     const [borderSizeX, borderSizeY] = this.getBorders(dimensions.border)
     const height = dimensions.canvas.height
     const width = dimensions.canvas.width
+
+    // context.scale(-1, 1);
+    // context.translate(width, 0);
 
     // clamp border radius between zero (perfect rectangle) and half the size without borders (perfect circle or "pill")
     borderRadius = Math.max(borderRadius, 0)
@@ -709,6 +721,7 @@ class AvatarEditor extends React.Component {
     const {
       scale,
       rotate,
+      isRotateY,
       image,
       border,
       borderRadius,
@@ -730,7 +743,7 @@ class AvatarEditor extends React.Component {
       disableHiDPIScaling,
       ...rest
     } = this.props
-
+  
     const dimensions = this.getDimensions()
     const defaultStyle = {
       width: dimensions.canvas.width,
@@ -747,7 +760,6 @@ class AvatarEditor extends React.Component {
         ...style,
       },
     }
-
     attributes[deviceEvents.react.down] = this.handleMouseDown
     if (isTouchDevice) {
       attributes[deviceEvents.react.mouseDown] = this.handleMouseDown

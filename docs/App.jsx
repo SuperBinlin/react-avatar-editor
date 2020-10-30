@@ -8,13 +8,13 @@ class App extends React.Component {
     image: 'avatar.jpg',
     allowZoomOut: false,
     position: { x: 0.5, y: 0.5 },
+    isRotateY: false,
     scale: 1,
     rotate: 0,
     borderRadius: 0,
     preview: null,
     width: 200,
     height: 200,
-    isRotateY: false,
     disableCanvasRotation: false,
   }
 
@@ -41,6 +41,12 @@ class App extends React.Component {
   handleScale = e => {
     const scale = parseFloat(e.target.value)
     this.setState({ scale })
+  }
+
+  handleRotateY = () => {
+    this.setState({
+      isRotateY: !this.state.isRotateY,
+    })
   }
 
   handleAllowZoomOut = ({ target: { checked: allowZoomOut } }) => {
@@ -137,6 +143,7 @@ class App extends React.Component {
               scale={parseFloat(this.state.scale)}
               width={this.state.width}
               height={this.state.height}
+              border={0}
               position={this.state.position}
               onPositionChange={this.handlePositionChange}
               rotate={parseFloat(this.state.rotate)}
@@ -254,6 +261,7 @@ class App extends React.Component {
         <br />
         <br />
         <input type="button" onClick={this.handleSave} value="Preview" />
+        <input type="button" onClick={this.handleRotateY} value="rotateY" />
         <br />
         {!!this.state.preview && (
           <img

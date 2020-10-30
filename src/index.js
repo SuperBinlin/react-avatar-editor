@@ -521,7 +521,6 @@ class AvatarEditor extends React.Component {
   paintImage(context, image, border, scaleFactor = pixelRatio) {
     if (image.resource) {
       const position = this.calculatePosition(image, border)
-
       context.save()
 
       context.translate(context.canvas.width / 2, context.canvas.height / 2)
@@ -535,7 +534,7 @@ class AvatarEditor extends React.Component {
         context.translate(0, 0); 
       } else {
         context.scale(-1, 1);
-        context.translate(-image.width, 0);
+        context.translate(-image.width - 40, 0);
       }
 
       if (this.isVertical()) {
@@ -655,12 +654,18 @@ class AvatarEditor extends React.Component {
 
     e.preventDefault() // stop scrolling on iOS Safari
 
-    const mousePositionX = e.targetTouches
+    let mousePositionX = e.targetTouches
       ? e.targetTouches[0].pageX
       : e.clientX
     const mousePositionY = e.targetTouches
       ? e.targetTouches[0].pageY
       : e.clientY
+
+    if (this.props.isRotateY) {
+      mousePositionX = e.targetTouches
+        ? -e.targetTouches[0].pageX
+        : -e.clientX
+    }
 
     const newState = {
       mx: mousePositionX,
